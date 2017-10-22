@@ -27,9 +27,7 @@ class Article extends Component {
 
     this.state = {
       title: 'Article',
-      text: '',
       html: '',
-      filename: this.props.match.params.docname,
     };
   }
 
@@ -50,7 +48,9 @@ class Article extends Component {
           ]}
         />
         <div className={main.container}>
+          {/* eslint-disable react/no-danger */}
           <article dangerouslySetInnerHTML={{ __html: this.state.html }} />
+          {/* eslint-enable react/no-danger */}
         </div>
       </div>
     );
@@ -212,9 +212,10 @@ import { articleRoute } from 'shared/routes';
 
 class Tutorial extends Component {
   render() {
+    const articleLink = articleRoute(this.props.docname);
     return (
       <article>
-        <Link to={articleRoute(this.props.docname)}>
+        <Link to={articleLink}>
           <h2>
             {this.props.title}
           </h2>
@@ -222,7 +223,7 @@ class Tutorial extends Component {
         <p>
           {this.props.children}
         </p>
-        <Link to={articleRoute(this.props.docname)}>Read more ...</Link>
+        <Link to={articleLink}>Read more ...</Link>
       </article>
     );
   }
@@ -258,7 +259,7 @@ class Tutorials extends Component {
     return (
       <div>
         <Helmet
-          title={'Tutorials'}
+          title="Tutorials"
           meta={[{ name: 'description', content: 'Tutorial Page description' }]}
         />
         <Header text="Tutorials" />

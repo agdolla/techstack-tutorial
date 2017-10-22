@@ -102,11 +102,9 @@ routing(app);
 
 app.listen(WEB_PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(
-    `Server running on port ${WEB_PORT} ${isProd
-      ? '(production)'
-      : '(development).\nKeep "yarn dev:wds" running in an other terminal'}.`,
-  );
+  console.log(`Server running on port ${WEB_PORT} ${isProd
+    ? '(production)'
+    : '(development).\nKeep "yarn dev:wds" running in an other terminal'}.`);
 });
 ```
 
@@ -124,11 +122,10 @@ import { APP_CONTAINER_CLASS, STATIC_PATH, WDS_PORT } from '../shared/config';
 import { isProd } from '../shared/util';
 
 function renderApp(location, state, routerContext = {}) {
-  const appHtml = ReactDOMServer.renderToString(
+  const appHtml = ReactDOMServer.renderToString((
     <StaticRouter location={location} context={routerContext}>
       <App />
-    </StaticRouter>,
-  );
+    </StaticRouter>));
 
   const script = isProd
     ? `<script src="${STATIC_PATH}/js/bundle.js"></script>`
@@ -216,7 +213,7 @@ class Home extends Component {
 // [...]
     return (
       <div>
-        <Helmet title={'Home'} meta={[{ name: 'description', content: 'Home Page description' }]} />
+        <Helmet title="Home" meta={[{ name: 'description', content: 'Home Page description' }]} />
         <h1>{APP_NAME}</h1>
       // [...]
 ```
@@ -232,7 +229,7 @@ class Tutorials extends Component {
     return (
       <div>
         <Helmet
-          title={'Tutorials'}
+          title="Tutorials"
           meta={[{ name: 'description', content: 'Tutorial Page description' }]}
         />
         <p>Tutorial List here</p>
@@ -256,7 +253,7 @@ class NotFoundPage extends Component {
     return (
       <div>
         <Helmet
-          title={'Not Found'}
+          title="Not Found"
           meta={[{ name: 'description', content: 'Not found Page description' }]}
         />
         <p>Page not found</p>
