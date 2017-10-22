@@ -2,8 +2,8 @@ import 'babel-polyfill';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 import { AppContainer } from 'react-hot-loader';
+import { BrowserRouter } from 'react-router-dom';
 
 import App from '../shared/app';
 import { APP_CONTAINER_SELECTOR } from '../shared/config';

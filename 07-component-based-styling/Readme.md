@@ -1,22 +1,21 @@
 # 07 - Component based Styling
 
-This is a tricky part to wrap the head around. We have the following situation:
+We follow the component based architecture approach, so how about styling? We decided to put styling to the component, but in the web we have the following situation:
 
-- **General**: A style should always be defined within a component
-- **Development**: You want to have Hot Module reload, when you change a style of a component
+- **General**: A style should always be defined within a component.
+- **Development**: You want to have Hot Module reload, when you change a style of a component.
 - **Development**: When the application is rendered on the server, you want to return the style inline.
-- **Production**: You want to return the styles as a seperate Stylesheet that gets loaded independently to the sourcecode and javascript code.
+- **Production**: You want to return the styles as a separate Stylesheet that gets loaded independently to the source code and javascript code.
 
-
-To fulfill this expectations, we add a style.css file to the component and define the look and feel for that particular component within the file.
+We do it by just adding a `style.css` file to the component and define the look and feel for that particular component within the file.
 
 ## The current state of CSS
 
-In 2017, the typical modern JavaScript stack settled. The different libraries and tools this tutorial made you set up are pretty much the *cutting-edge industry standard*. Yes, that's a complex stack to set up, but at least, most front-end devs agree that React-Webpack (maybe with Redux for WebApps) is the way to go. Now regarding CSS, I have some pretty bad news. Nothing settled, there is no standard way to go, no standard stack.
+In 2017, the typical modern JavaScript stack based on React has known best practices. The different libraries and tools this tutorial made you set up are pretty much the *cutting-edge industry standard*. Yes, that's a complex stack to set up, but at least, most front-end devs agree that React-Webpack (maybe with Redux for WebApps) is the way to go. Now regarding CSS, I have some pretty bad news. Nothing settled, there is no standard way to go, no standard stack.
 
 SASS, BEM, SMACSS, SUIT, Bass CSS, React Inline Styles, LESS, Styled Components, CSSX, JSS, Radium, Web Components, CSS Modules, OOCSS, Tachyons, Stylus, Atomic CSS, PostCSS, Aphrodite, React Native for Web, and many more that I forget are all different approaches or tools to get the job done. They all do it well, which is the problem, there is no clear winner, it's a big mess.
 
-We will follow a very traditional stack: CSS was developed by our forefathers and therefor it is stable to build upon. We will add some additional Power with sass later.
+We will follow a very traditional stack: CSS was developed by our forefathers and therefore it is stable to build upon. We will add some additional Power with SASS later.
 
 ## CSS Modules
 
@@ -43,7 +42,7 @@ All URLs (`url(...)`) and `@imports` are in module request format (`./xxx` and `
 
 ### Naming
 
-For local class names camelCase naming is recommended, but not enforced.
+For local class names camelCase naming is recommended but not enforced.
 
 ### Exceptions
 
@@ -57,13 +56,13 @@ Example: `.localA :global .global-b .global-c :local(.localD.localE) .global-d`
 
 ### Webpack config
 
-Now is a good time to differenciate between production config and development config. therefor we are going to split the configs into three configuration variables: *common*, *development* and *production*.
+Now is a good time to differentiate between production config and development config. Therefore, we are going to split the configs into three configuration variables: *common*, *development* and *production*.
 
 To combine the configurations we will use the library webpack-merge, so install that first:
 
 * **Run:** `yarn add --dev webpack-merge`
 
-Now put the content of the default export to an constant `commonConfig` and remove all conditions, where we were checking if isProd is true or other dev settings where made. On Bottom we now define an variable that contains the setup specific config:
+Now put the content of the default export to a constant `commonConfig` and remove all conditions where we were checking if isProd is true or other dev settings where made. On Bottom we now define a variable that contains the setup specific config:
 
 **Update** `webpack.config.babel.js`
 ```jsx
@@ -71,8 +70,7 @@ import path from 'path';
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 
-import { WDS_PORT } from './src/shared/config';
-import { isProd } from './src/shared/util';
+import { WDS_PORT, isProd } from './src/shared/config';
 
 // #1
 //
@@ -118,7 +116,7 @@ In Production we need to ensure three things:
 
 #### Render Page on Server & Combine all Styles
 
-In production the Server initiates the Server Side Rendering in lib/server, that was compiled by babel. During that compiling we need to tell babel, how to handle css files.
+In production the Server initiates the Server Side Rendering in lib/server that was compiled by babel. During that compiling we need to tell babel how to handle css files.
 
 For this we use the Babel plugin `babel-plugin-css-modules-transform`.
 
@@ -173,7 +171,7 @@ const productionConfig = {
 };
 ```
 
-Pretty simple. We don't need any css file handling, because the babel-loader uses the babel config and therefor already knows the css handling.
+Pretty simple. We don't need any css file handling because the babel-loader uses the babel config and therefore already knows the css handling.
 
 ### Link the extracted stylesheet from the application
 
@@ -208,7 +206,7 @@ Lets try it out:
 
 ```css
 .button {
-  background: linear-gradient(to bottom right, #ec008c, #e20015);
+  background: #e20015;
   border: none;
   margin: 20px;
   padding: 21px 40px;
@@ -216,7 +214,7 @@ Lets try it out:
 }
 ```
 
-Now in `src/shared/components/Button/index.jsx` import the styles and add the class to the Button:
+Now, in `src/shared/components/Button/index.jsx` **import** the styles and **add** the class to the Button:
 
 ```jsx
 //[...]
@@ -248,17 +246,17 @@ You will find a css/styles.css file with following content:
 }
 ```
 
-* **Run:** the application with `yarn prod:start`and reload `http://localhost:8000`;
+* **Run:** the application with `yarn prod:start`and reload `http://localhost:8000`. You will notice that the font family changed back to the default styling and the Buttons are styled. The reason for that is that when requesting style.css express finds the stylesheet in dist and sends it back immediatly, therefore ignores the stylesheet in public.
 
 ### Development Settings
 
-In Development we need to tell babel for Server Side Rendering as well, how the loader should handle css files. This behaves exactly the same as on production and therefor the `.babelrc` config works here as well.
+In Development, we need to tell babel for Server Side Rendering as well, how the loader should handle css files. This behaves exactly the same as on production and therefore the `.babelrc` config works here as well.
 
-But we want to have `Hot Module Reload` with `webpack` and therefore dont want to use an external file for our development changes.
+But we want to have `Hot Module Reload` with `webpack` and dont want to use an external file for our development changes.
 
-To use a different css handling we have to tell `webpack` and explicitly the `babel-loader` first, that it shouldn't use the babel config in webpack.
+To use a different css handling, we have to tell `webpack` and explicitly the `babel-loader` first, that it shouldn't use the babel config in webpack.
 
-And then we need to set a specific css handling for Development, check out the config how we treat those conditions:
+And then we need to **set** a specific css handling for Development. Check out the config on how we treat those conditions:
 
 ```jsx
 // #2
@@ -316,14 +314,16 @@ The interesting part is the `query` parameter for the `babel-loader`. It tells t
 
 * **Run:** `yarn add --dev style-loader css-loader`
 
-The next rule uses css-loader with modules true to put the css imports into your javascript modules and therefor enables Hot Module Reload in Development.
+The next rule uses css-loader with modules true to put the css imports into your javascript modules and therefore enables Hot Module Reload in Development.
 
-* **Run:** the application with `yarn start` and in another window `yarn dev:wds` and reload `http://localhost:8000`.
+* **Run:** the application with `yarn start` and in another window `yarn dev:wds` and reload `http://localhost:8000`. When you refresh a couple of times you notice that the style is loaded with a bit of delay. This shows that the styling is only done when the javascript is loaded and we have hot module reload for styles as well.
 
 *Don't forget to close the production server with `yarn prod:stop` if it is still running.*
 
 
 ### Set some global stylings
+
+The style from public/css is ignored and we could just rename it and link it in the application. But to fit it into our development process we put it into our app:
 
 **Create** a file `src/shared/styles/main.css` containing:
 
@@ -335,22 +335,6 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: Verdana;
-}
-
-html {
-  background-image: url("http://xxxl.digital/wp-content/uploads/2016/10/PA123434.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-body {
-  background: #ea003e;
-  background-color: linear-gradient(to bottom, #ea003e 0%, #a8106b 100%);
-  opacity: 0.95;
-}
-
-a {
-  color: white;
 }
 ```
 
@@ -368,8 +352,7 @@ class App extends Component {
 //[...]
 ```
 
-
-You should see the result without reloading.
+You should see the result (different font family) without reloading.
 
 ## Sass Time
 
@@ -379,7 +362,7 @@ To use Sass files, we have to change the css loader in our webpack config and ad
 
 * **Run:** `yarn add --dev node-sass sass-loader`
 
-**Modify** `webpack.config.babel.js` to add the sass loader to the webpack config:
+**Modify** `webpack.config.babel.js` to add the sass loader to the development webpack config:
 
 ```jsx
   {
@@ -416,7 +399,7 @@ module.exports = function processSass(data, filename) {
 };
 ```
 
-and modify the `.babelrc`:
+and **modify** the `.babelrc`:
 
 ```json
 {
@@ -435,16 +418,18 @@ and modify the `.babelrc`:
 }
 ```
 
-Now change the filename and the import of the Button Component and the global Stylesheet to .scss.
+This looks quite hacky and it actually is. With Babel 7 the configuration can be a js file (.babelrc.js) so we can do the same in one file, until then we do the hacky way in Babel 6.
+
+Now, change the filename and the import of the Button Component and the global Stylesheet to .scss.
 
 **Create** a new file `src/shared/styles/_variables.scss`:
 
 ```sass
-$brand-primary: #ea003e;
-$brand-secondary: #a8106b;
+$brand-primary: #e20015;
+;
 ```
 
-And **modify** `src/shared/styles/main.scss`:
+And **rename** and **modify** `src/shared/styles/main.scss`:
 
 ```sass
 @import 'variables';
@@ -458,24 +443,8 @@ body {
   font-family: Verdana;
 }
 
-html {
-  background-image: url("http://xxxl.digital/wp-content/uploads/2016/10/PA123434.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-body {
-  background: $brand-primary;
-  background-color: linear-gradient(
-    to bottom,
-    $brand-primary 0%,
-    $brand-secondary 100%
-  );
-  opacity: 0.95;
-}
-
 a {
-  color: white;
+  color: $brand-primary;
 }
 ```
 
@@ -488,13 +457,17 @@ import './styles/main.scss';
 class App extends Component {
 ```
 
-webpack provides an [advanced mechanism to resolve files](https://webpack.js.org/concepts/module-resolution/). The sass-loader uses node-sass' custom importer feature to pass all queries to the webpack resolving engine. Thus you can import your Sass modules from node_modules. Just prepend them with a ~ to tell webpack that this is not a relative import:
+**Cancel** `yarn dev:wds` and **run** it again so that the new webpack config is applied. If you reload the application you should see the Links in red and the sass style was successfully compiled. The same will happen when you run the production steps.
+
+## Absolute Paths (or 'kind of' Namespacing)
+
+Webpack provides an [advanced mechanism to resolve files](https://webpack.js.org/concepts/module-resolution/). The sass-loader uses node-sass' custom importer feature to pass all queries to the webpack resolving engine. Thus you can import your Sass modules from node_modules. Just prepend them with a ~ to tell webpack that this is not a relative import:
 
 `@import "~bootstrap/dist/css/bootstrap";`
 
-It's important to only prepend it with ~, because ~/ resolves to the home directory. webpack needs to distinguish between bootstrap and ~bootstrap because CSS and Sass files have no special syntax for importing relative files. Writing @import "file" is the same as @import "./file";
+It's important to only prepend it with ~ because ~/ resolves to the home directory. webpack needs to distinguish between bootstrap and ~bootstrap because CSS and Sass files have no special syntax for importing relative files. Writing @import "file" is the same as @import "./file";
 
-To take advantage of this module resolving we also change the behaviour, where webpack is looking for files. Open `webpack.config.babel.js` and **change** the commonConfig Variable to:
+To take advantage of this module resolving, we also change the behavior where webpack is looking for files. Open `webpack.config.babel.js` and **change** the commonConfig Variable to:
 
 ```jsx
 // #1
@@ -513,7 +486,7 @@ const commonConfig = {
 };
 ```
 
-This tells Webpack when looking for an import that is not relative or absolute to look ***first*** in the **src** folder and only after that into the node_modules folder.
+This tells webpack when looking for an import that is not relative or absolute to look ***first*** in the **src** folder and only after that into the node_modules folder.
 
 **Modify** `babelrc.js` to do the same thing for the babel node sass preprocessor:
 
@@ -536,9 +509,9 @@ module.exports = function processSass(data, filename) {
 
 ```
 
-## Add better Linking
+### Add better Linking
 
-The resolve modules webpack feature is not only for sass imports but also js imports. We can reduce with this the overall linking complexity of our application:
+The resolve modules webpack feature is not only for sass imports but also js imports. We can reduce the overall linking complexity of our application with this:
 
 ```jsx
 // Use this:
@@ -551,7 +524,7 @@ To handle the server side once again we have to align webpack again with babel l
 
 * **Run:** `yarn add --dev babel-plugin-module-resolver`
 
-And modify the `.babelrc` Config:
+And **modify** the `.babelrc` Config:
 ```json
 {
   "presets": ["env", "react"],
@@ -575,13 +548,13 @@ And modify the `.babelrc` Config:
 }
 ```
 
-Now everytime babel is resolving a path it will look in `src/` before `node_modules`.
+Now every time babel is resolving a path it will look in `src/` before `node_modules`.
 
 To avoid ES Linting errors add another plugin:
 
 * **Run:** `yarn add --dev eslint-plugin-import eslint-import-resolver-babel-module`
 
-And modify your `.eslintrc.json` file to:
+And **modify** your `.eslintrc.json` file to:
 
 ```json
 {
@@ -613,19 +586,22 @@ Now you can change the relative imports in the following files:
 - src/shared/components/Navigation/index.jsx
 - src/shared/pages/Home/index.jsx
 
-Keep HMR active, to see if it works correctly.
+Change the imports to the absolute path (so `import App from '../shared/app'` to `import App from 'shared/app;`)
 
-That was a tough one, not just for you but for us as well. When you came that far visit us and lets talk about the stuff that just happened. (florian)
+Keep HMR active - to see if it works correctly.
+
+That was a tough one, not just for you but for us as well. When you came that far you have a pretty solid stack already, I know it seems we have a lot of plugins but they do quite simple tasks and help us to keep a nice codebase without having relative paths like crazy. The more imports you have the better you will understand.
 
 Congratulations, you completed Page 7!
 
-Dont forget to:
+Don't forget to:
 
 **Run:** `git add .`
 and then
 `git commit -m="Page 7"`
 
 ---
+
 
 Next section: [08 - Better Styles](https://github.com/XXXLutz/techstack-tutorial/blob/master/08-better-styles/Readme.md)
 

@@ -1,28 +1,21 @@
-import {
-  HOME_PAGE_ROUTE,
-  TUTORIALS_PAGE_ROUTE,
-  firstEndpointRoute,
-  articleRoute,
-} from 'shared/routes';
+import { tutorialsPage } from 'server/controller';
+import { HOME_PAGE_ROUTE, firstEndpointRoute, tutorialsRoute } from 'shared/routes';
 
-import { homePage, tutorialsPage, articlePage } from './controller';
-import renderApp from './render-app';
+import renderApp from 'server/render-app';
 
 export default (app) => {
   app.get(HOME_PAGE_ROUTE, (req, res) => {
-    res.send(renderApp(req.url, homePage()));
+    res.send(renderApp(req.url));
   });
 
-  app.get(TUTORIALS_PAGE_ROUTE, (req, res) => {
+  app.get(tutorialsRoute(), (req, res) => {
     res.send(renderApp(req.url, tutorialsPage()));
   });
 
-  app.get(articleRoute(), (req, res) => {
-    res.send(renderApp(req.url, articlePage()));
-  });
-
   app.get(firstEndpointRoute(), (req, res) => {
-    res.json(tutorialsPage(req.params.num));
+    res.json({
+      serverMessage: `Hello from the server! (received ${req.params.num})`,
+    });
   });
 
   app.get('/500', () => {
