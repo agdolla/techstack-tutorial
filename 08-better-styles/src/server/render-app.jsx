@@ -8,11 +8,10 @@ import { APP_CONTAINER_CLASS, STATIC_PATH, WDS_PORT } from 'shared/config';
 import { isProd } from 'shared/util';
 
 function renderApp(location, state, routerContext = {}) {
-  const appHtml = ReactDOMServer.renderToString(
+  const appHtml = ReactDOMServer.renderToString((
     <StaticRouter location={location} context={routerContext}>
       <App />
-    </StaticRouter>,
-  );
+    </StaticRouter>));
   const head = Helmet.rewind();
 
   const stylesheet = isProd

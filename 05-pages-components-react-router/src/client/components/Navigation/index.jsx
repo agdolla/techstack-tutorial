@@ -20,8 +20,7 @@ class Navigation extends Component {
               <NavLink to={link.route} activeStyle={{ color: 'limegreen' }} exact>
                 {link.label}
               </NavLink>
-            </li>),
-          )}
+            </li>))}
         </ul>
       </nav>
     );

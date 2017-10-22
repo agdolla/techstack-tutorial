@@ -21,8 +21,8 @@ class Navigation extends Component {
             { route: HOME_PAGE_ROUTE, label: 'Home' },
             { route: TUTORIALS_PAGE_ROUTE, label: 'Tutorials' },
             { route: NOT_FOUND_DEMO_PAGE_ROUTE, label: '404 Demo' },
-          ].map(link =>
-            (<li key={link.route} className={styles.navigationListitem}>
+          ].map(link => (
+            <li key={link.route} className={styles.navigationListitem}>
               <NavLink
                 className={styles.navigationHref}
                 to={link.route}
@@ -31,8 +31,8 @@ class Navigation extends Component {
               >
                 {link.label}
               </NavLink>
-            </li>),
-          )}
+            </li>
+          ))}
         </ul>
       </nav>
     );

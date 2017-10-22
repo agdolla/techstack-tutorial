@@ -6,9 +6,10 @@ import { articleRoute } from 'shared/routes';
 
 class Tutorial extends Component {
   render() {
+    const articleLink = articleRoute(this.props.docname);
     return (
       <article>
-        <Link to={articleRoute(this.props.docname)}>
+        <Link to={articleLink}>
           <h2>
             {this.props.title}
           </h2>
@@ -16,7 +17,7 @@ class Tutorial extends Component {
         <p>
           {this.props.children}
         </p>
-        <Link to={articleRoute(this.props.docname)}>Read more ...</Link>
+        <Link to={articleLink}>Read more ...</Link>
       </article>
     );
   }

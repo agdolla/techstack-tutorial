@@ -5,9 +5,9 @@ import React, { Component } from 'react';
 import Button from 'shared/components/Button';
 import Header from 'shared/components/Header';
 
-import main from '../../styles/main.scss';
-
 import { firstEndpointRoute } from 'shared/routes';
+
+import main from '../../styles/main.scss';
 
 class Home extends Component {
   constructor(props) {
@@ -63,7 +63,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Helmet title={'Home'} meta={[{ name: 'description', content: 'Home Page description' }]} />
+        <Helmet title="Home" meta={[{ name: 'description', content: 'Home Page description' }]} />
         <Header text="Home" />
         <div className={main.container}>
           <div className={main.row}>
